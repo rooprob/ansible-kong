@@ -38,9 +38,9 @@ log_level = {{ kong_log_level }}
 # of accepted values.
 
 {% if kong_proxy_access_log != 'off' %}
-{% if kong_nginx_json_log_format_enable|default(false) and not kong_proxy_access_log|match('.*custom_json$') %}
+{% if kong_nginx_json_log_format_enable|default(false) and not kong_proxy_access_log is match('.*custom_json$') %}
 {% set kong_proxy_access_log = kong_proxy_access_log + ' custom_json' %}
-{% elif kong_nginx_custom_log_fields|default([]) and not kong_proxy_access_log|match('.*custom$') %}
+{% elif kong_nginx_custom_log_fields|default([]) and not kong_proxy_access_log is match('.*custom$') %}
 {% set kong_proxy_access_log = kong_proxy_access_log + ' custom' %}
 {% endif %}
 {% endif %}
@@ -59,9 +59,9 @@ proxy_error_log = {{ kong_proxy_error_log }}
                                           # directive.
 
 {% if kong_admin_access_log != 'off' %}
-{% if kong_nginx_json_log_format_enable|default(false) and not kong_admin_access_log|match('.*custom_json$') %}
+{% if kong_nginx_json_log_format_enable|default(false) and not kong_admin_access_log is match('.*custom_json$') %}
 {% set kong_admin_access_log = kong_admin_access_log + ' custom_json' %}
-{% elif kong_nginx_custom_log_fields|default([]) and not kong_admin_access_log|match('.*custom$') %}
+{% elif kong_nginx_custom_log_fields|default([]) and not kong_admin_access_log is match('.*custom$') %}
 {% set kong_admin_access_log = kong_admin_access_log + ' custom' %}
 {% endif %}
 {% endif %}
@@ -229,7 +229,7 @@ admin_ssl_cert_key = {{ kong_admin_ssl_cert_key|default('') }}
 #admin_ssl_cert_key =            # The absolute path to the SSL key for
                                  # `admin_listen` values with SSL enabled.
 
-upstream_keepalive = {{ kong_upstream_keepalive|default(60) }}
+nginx_upstream_keepalive = {{ kong_upstream_keepalive|default(60) }}
 #upstream_keepalive = 60         # Sets the maximum number of idle keepalive
                                  # connections to upstream servers that are
                                  # preserved in the cache of each worker

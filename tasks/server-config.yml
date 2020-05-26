@@ -4,18 +4,6 @@
 ##  v0.11.x and above
 ##-------------------
 
-- name: Create kong config file | v0.12.x or earlier
-  template:
-    src:  "0.11.x-kong.conf.j2"
-    dest: "{{ kong_conf_dir }}/kong.conf"
-    owner: root
-    group: root
-    mode:  0644
-  notify:
-    - Validate kong config
-    - "{{ kong_restart }}"
-  when: kong_version|version_compare('0.13.0', '<')
-
 - name: Create kong config file | v0.13.x or later
   template:
     src:  "kong.conf.j2"
@@ -23,7 +11,7 @@
     owner: root
     group: root
     mode:  0644
-  when: kong_version|version_compare('0.13.0', '>=')
+  when: kong_version is version_compare('0.13.0', '>=')
   notify:
     - Validate kong config
     - "{{ kong_restart }}"
@@ -73,6 +61,17 @@
 - debug: var=health
 - debug: var=run_status
 
+- name: Copy over db-less kong.yml
+  template:
+    src: kong.yml.j2
+    dest: "{{ kong_conf_dir }}/kong.yml"
+    owner: root
+    group: root
+    mode:  0644
+  when: kong_database == "off"
+  notify:
+    - "{{ kong_restart }}"
+
 - name: Update kong database schema
   shell: >
       kong migrations bootstrap --conf {{ kong_conf_dir }}/kong.conf
@@ -81,6 +80,7 @@
   when: run_status == "down"
   run_once: true
   register: migration
+  when: kong_database != "off"
 
 - name: Copy over kong init script
   template:
@@ -116,9 +116,9 @@
 - name: Reload systemd if init script is deleted
   systemd:
     daemon_reload: yes
-  when: del_init_script|changed
+  when: del_init_script is changed
 
-- name: Start kong natively
+- name: Start kong manually
   shell: >
       ulimit -n "{{ kong_max_files_limit }}" && \
         kong start --conf {{ kong_conf_dir }}/kong.conf --nginx-conf {{ kong_conf_dir }}/custom-nginx.template
@@ -127,7 +127,7 @@
   when: run_status == "down" and not kong_manage_init_script
   register: start
 
-- name: Start kong via init
+- name: Start kong via startup script
   service:
     name: kong
     enabled: yes

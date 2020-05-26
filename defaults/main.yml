@@ -8,17 +8,13 @@ kong_manage_init_script: true
 ############
 ##  Package
 kong_prereqs: [ openssl, libpcre3, procps, perl ]
-kong_version: 0.13.1
+kong_version: 2.0.4
 kong_version_string:      "{{ kong_version|string }}"
 kong_major_minor_version: "{{ kong_version_string.split('.')|first }}.{{ kong_version_string.split('.')[1] }}"
 kong_deb_pkg:     "kong-community-edition-{{ kong_version }}.{{ ansible_distribution_release }}.all.deb"
-kong_rpm_pkg:     "kong-{{ kong_version }}.el7.noarch.rpm"
+kong_rpm_pkg:     "kong-{{ kong_version }}.el7.amd64.rpm"
 kong_deb_pkg_url: "https://bintray.com/kong/kong-community-edition-deb/download_file?file_path=dists/{{ kong_deb_pkg }}"
 kong_rpm_pkg_url: "https://kong.bintray.com/kong-rpm/centos/7/{{ kong_rpm_pkg }}"
-kong_deb_pkg_pre_0_11_x:     "kong-{{ kong_version }}.{{ ansible_distribution_release }}_all.deb"
-kong_rpm_pkg_pre_0_11_x:     "kong-{{ kong_version }}.el7.noarch.rpm"
-kong_deb_pkg_url_pre_0_11_x: "https://github.com/Mashape/kong/releases/download/{{ kong_version }}/{{ kong_deb_pkg_pre_0_11_x }}"
-kong_rpm_pkg_url_pre_0_11_x: "https://github.com/Mashape/kong/releases/download/{{ kong_version }}/{{ kong_rpm_pkg_pre_0_11_x }}"
 
 ############
 ##  Config
@@ -78,7 +74,7 @@ kong_logrotate_maxsize:   500M
 ##------------------
 ## DATASTORE
 ##------------------
-kong_database:        cassandra
+kong_database:        "off"
 #----  PostgreSQL  ----
 kong_pg_host:         127.0.0.1
 kong_pg_port:         5432
@@ -162,18 +158,22 @@ kong_admin_api_url: "http://localhost:8001"
 
 kong_delete_service_obj: false              # set to True to delete service object from kong
 kong_service_config: {}                     # for service object and associated route objects
+kong_services_config: []                    # list of service objects for db-less static config
 # Kong service-routes config associates routes to a service.
 # Service-to-Route is 1-to-Many relationship
 
 kong_delete_route_obj: false                # set to True to delete route object from kong
 kong_route_config: {}                       # for route object config
+kong_routes_config: []                      # list of route objects for db-less static config
 
 kong_delete_plugin_obj: false               # set to True to delete plugin object from kong
 kong_plugin_config: {}                      # for plugin object config
+kong_plugins_config: []                     # list of plugin objects for db-less static config
 
 ## Consumer Object
 kong_delete_consumer_obj: false             # set to True to delete consumer object from kong
 kong_consumer_config: {}                    # for consumer object config
+kong_consumers_config: []                   # list of consumer objects for db-less static config
 
 ## Upstream Object
 kong_delete_upstream_obj: false             # set to True to delete upstream object from kong

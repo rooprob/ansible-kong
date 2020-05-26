@@ -32,6 +32,18 @@
     state: restarted
     sleep: 2  # stop race conditions
 
+- name: Reload kong with systemd script
+  systemd:
+    enabled: yes
+    name: kong
+    state: reloaded
+
+- name: Restart kong with systemd script
+  systemd:
+    name: kong
+    enabled: yes
+    state: restarted
+
 - name: Reload systemd
   systemd:
     daemon_reload: yes
