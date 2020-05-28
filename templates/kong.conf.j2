@@ -165,6 +165,8 @@ nginx_user = {{ kong_nginx_user }}
 nginx_worker_processes = {{ kong_nginx_worker_processes }}
 #nginx_worker_processes = auto   # Determines the number of worker processes
                                  # spawned by Nginx.
+nginx_events_worker_connections = {{ kong_nginx_events_worker_connections }}
+nginx_main_worker_rlimit_nofile = {{ kong_nginx_main_worker_rlimit_nofile }}
 
 nginx_daemon = {{ kong_nginx_daemon|default('on')|lower }}
 #nginx_daemon = on               # Determines wether Nginx will run as a daemon

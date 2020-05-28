@@ -9,12 +9,13 @@ pid pids/nginx.pid;
 error_log logs/error.log {{ '${{' }}LOG_LEVEL}};
 
 > if nginx_optimizations then
-worker_rlimit_nofile {{ '${{' }}WORKER_RLIMIT}};
+# WORKER_CONNECTIONS * WORKER_PROCESSES * 2
+worker_rlimit_nofile {{ '${{' }}NGINX_MAIN_WORKER_RLIMIT_NOFILE}};
 > end
 
 events {
 > if nginx_optimizations then
-    worker_connections {{ '${{' }}WORKER_CONNECTIONS}};
+    worker_connections {{ '${{' }}NGINX_EVENTS_WORKER_CONNECTIONS}};
     multi_accept on;
 > end
 }
