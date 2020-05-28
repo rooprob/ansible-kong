@@ -77,10 +77,9 @@
       kong migrations bootstrap --conf {{ kong_conf_dir }}/kong.conf
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
-  when: run_status == "down"
+  when: run_status == "down" and kong_database != "off"
   run_once: true
   register: migration
-  when: kong_database != "off"
 
 - name: Copy over kong init script
   template:
