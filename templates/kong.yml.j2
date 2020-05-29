@@ -85,4 +85,8 @@ consumers:
 plugins:
 {{ kong_plugins_config | to_nice_yaml }}
 {% endif %}
+{% if kong_jwt_secrets_config|length %}
+jwt_secrets:
+{{ kong_jwt_secrets_config | to_nice_yaml }}
+{% endif %}
 

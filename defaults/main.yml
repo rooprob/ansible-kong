@@ -171,6 +171,7 @@ kong_routes_config: []                      # list of route objects for db-less 
 kong_delete_plugin_obj: false               # set to True to delete plugin object from kong
 kong_plugin_config: {}                      # for plugin object config
 kong_plugins_config: []                     # list of plugin objects for db-less static config
+kong_jwt_secerts_config: []                 # list of jwt_secrets objects for db-less static config
 
 ## Consumer Object
 kong_delete_consumer_obj: false             # set to True to delete consumer object from kong
